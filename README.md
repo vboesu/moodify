@@ -9,8 +9,8 @@ Implemented in Python (3.6+) and C for speed.
 * [Usage](#usage)
 
 ## Screenshots
-![moodify Home](https://ibb.co/nwCWdSZ "moodify Home")
-![moodify Generate Palette](https://ibb.co/7Sbd7ZK "moodify Generate Palette")
+![moodify Home](https://i.ibb.co/PrtvBPg/moodify-home.png "moodify Home")
+![moodify Generate Palette](https://i.ibb.co/zmJk9wj/moodify-generate.png "moodify Generate Palette")
 
 ## Installation
 To install the project, it suffices to download the repository into a folder and extract it. I recommend creating a virtual environment for the project using
