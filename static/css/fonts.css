@@ -1,0 +1,32 @@
+@font-face {
+    font-family: "sf";
+    font-style: normal;
+    font-weight: 400;
+    src: url(/static/fonts/sf_regular.eot);
+    src: url(/static/fonts/sf_regular.eot?#iefix) format("embedded-opentype"),
+        url(/static/fonts/sf_regular.woff2) format("woff2"),
+        url(/static/fonts/sf_regular.woff) format("woff"),
+        url(/static/fonts/sf_regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "sf";
+    font-style: bold;
+    font-weight: 700;
+    src: url(/static/fonts/sf_semi.eot);
+    src: url(/static/fonts/sf_semi.eot?#iefix) format("embedded-opentype"),
+        url(/static/fonts/sf_semi.woff2) format("woff2"),
+        url(/static/fonts/sf_semi.woff) format("woff"),
+        url(/static/fonts/sf_semi.ttf) format("truetype");
+}
+
+body {
+    font-family: "sf", sans-serif;
+    letter-spacing: 0.5px;
+}
+
+input[type=text],
+input[type=number],
+input[type=password] {
+    font-family: "sf", sans-serif;
+}

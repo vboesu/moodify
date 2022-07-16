@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<section>
+    <h1 class="center">Login</h1>
+    {% if referer %}
+    <p class="center">You need to be logged in to access this function.</p>
+    {% endif %}
+    <form id="login" style="width: 100%; max-width: 40rem; margin: 0 auto;">
+        <div class="flex column mobile-column">
+            <div class="input-row flex-item stretch">
+                <input type="text" id="email" name="email" placeholder="e-mail" />
+                <label for="email">E-mail</label>
+            </div>
+            <div class="input-row flex-item stretch">
+                <input type="password" id="password" name="password" placeholder="password" />
+                <label for="password">Password</label>
+            </div>
+            <div class="flex row space mobile-column mobile-reverse flex-item stretch flex-margin-small">
+                <a class="button flex-item grow bordered register" href="/register">No account yet? Register</a>
+                <a class="button flex-item grow flex-margin-small primary login enter-to-click">Login</a>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+            $(".login").on("click", function (e) {
+                // form validation
+                $("#login").find("input, div[contenteditable]").each(function () {
+                    $(this).removeClass("form-invalid")
+
+                    let value = $(this).val() ? $(this).val() : $(this).text()
+                    let label = $(this).parent().find("label").first()
+                    label.find("span").remove()
+
+                    if (!value.trim()) {
+                        $(this).addClass("form-invalid")
+                        label.append($("<span/>").text(" - This field is required"))
+                    }
+                })
+
+                if (!$("#login .form-invalid").length) {
+                    ajax("/api" + location.pathname + location.search, {
+                        data: $("form#login").serialize(),
+                        form: $("form#login"),
+                        returnData: function (data) {
+                            location.href = data.redirect ? data.redirect : "/favorites"
+                        },
+                        onError: function (data) {
+                            $.each(data.responseJSON.elements, function (k, v) {
+                                let label = $(`#${v}`).parent().find("label").first()
+                                $(`#${v}`).addClass("form-invalid")
+                                label.append($("<span/>").text(` - ${data.responseJSON.message}`))
+                            })
+                        }
+                    })
+                }
+            })
+
+            $(".register").click(function (e) {
+                e.preventDefault()
+                location.href = "/register" + location.search
+            })
+        })
+    </script>
+</section>
+
+{% endblock %}

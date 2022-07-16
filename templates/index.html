@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="home flex row space">
+    <div class="flex-item grow flex column center mobile-column">
+        <div>
+            <h1 class="heading-indent" data-indent="1">Create beautiful</h1>
+            <h1 class="heading-indent" data-indent="2">color palettes</h1>
+        </div>
+        <div class="flex row space mobile-column">
+            <a class="button flex-item primary" href="/generate">Generate Palette</a>
+            <a class="button flex-item flex-margin-small bordered" href="/search">Mood Search</a>
+        </div>
+    </div>
+    <div class="flex-item grow flex-margin mobile-hide flex row">
+        <div class="palette-mockup">
+            <div class="upper">
+                <div class="outer">
+                    <div class="inner colors flex row">
+                        {% for i in range(5) %}
+                        <div class="color flex-item grow"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="lower">
+                <div class="stand"></div>
+                <div class="foot"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="flex row space">
+    <div class="flex-item grow">
+        <img src="/static/icons/apply_palette.svg" />
+    </div>
+    <div class="flex-item grow flex-margin flex column center mobile-column">
+        <div>
+            <h1 class="heading-indent" data-indent="1">Apply palettes</h1>
+            <h1 class="heading-indent" data-indent="2">to images</h1>
+        </div>
+        <div class="flex row space mobile-column">
+            <a class="button flex-item primary" href="/apply">Apply Palette</a>
+            <a class="button flex-item flex-margin-small bordered" href="/generate">Generate Palette</a>
+        </div>
+    </div>
+</section>
+<script>
+    function setPalette(palette, identifier = ".colors .color") {
+        $.each(palette, function (k, v) {
+            $(identifier).eq(k).css("background-color", `#${v}`)
+        })
+    }
+
+    $(function () {
+        // Loop through color palettes
+        var active_palette = 0
+        var palettes = [
+            ["0C0C0C", "495284", "9398A1", "C0DDEF", "F3F6FC"],
+            ["33CC87", "FFFFFF", "54C0D3", "8233CC", "64D6A3"],
+            ["DBDB8E", "8EDBBB", "978EDB", "DB8EB1", "F2F9F6"],
+            ["706B9B", "BFA4A0", "A0BFA4", "A3A0BF", "FFFFFF"],
+            ["7B8FB7", "9887DB", "ABB8D1", "DEE3ED", "F7F7F7"],
+            ["7782A8", "969FBC", "BC96A1", "E0B09D", "EFEDED"],
+            ["4C8265", "B59782", "82B59A", "9582B5", "EFEBE8"]
+        ]
+
+        setInterval(function () {
+            active_palette += 1
+            if (active_palette >= palettes.length) active_palette = 0
+
+            setPalette(palettes[active_palette])
+        }, 1500)
+
+        setPalette(palettes[0])
+    })
+</script>
+</section>
+{% endblock %}

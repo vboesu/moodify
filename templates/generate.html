@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Generate Color Palette{% endblock %}
+{% block nav_desktop_classes %}fixed{% endblock %}
+{% block scripts %}
+<script src="/static/js/generator.js"></script>
+<script>
+    var uploadURL = "/api/generate/image"
+    var callback = function (data) {
+        $(".upload").fadeOut()
+        fillPalette(data.palette)
+    }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="generator flex column mobile-column">
+    <div class="generator-menu mobile-hide flex row space flex-item stretch">
+        <div class="instructions tablet-hide">Press space bar to generate palette</div>
+        <a class="button bordered tablet-show generate">Generate</a>
+        <div class="controls flex row">
+            <a href="#" class="flex-item search-with-palette">Search with palette</a>
+            <a href="#" class="flex-item flex-margin-small create-from-image">Create From Image</a>
+            <a href="#" class="flex-item flex-margin-small save">Save</a>
+            <a href="#" class="flex-item flex-margin-small my-palettes">My Palettes</a>
+        </div>
+    </div>
+    <div class="colors flex row flex-item grow">
+        <div class="color flex-item grow loading"></div>
+        <div class="palette-library flex-item stretch">
+            <h3>My Palettes</h3>
+            <div class="palettes small flex-item stretch flex column start mobile-column"></div>
+        </div>
+    </div>
+    <div class="generator-menu-mobile mobile-show flex row mobile-row space flex-item stretch">
+        <a class="button flex-item grow bordered generate">Generate</a>
+        <a class="button flex-item flex-margin options"></a>
+        <div class="controls flex column mobile-column">
+            <a href="#" class="flex-item search-with-palette">Search with palette</a>
+            <a href="#" class="flex-item grow flex-margin-small create-from-image">Create From Image</a>
+            <a href="#" class="flex-item grow flex-margin-small save">Save</a>
+            <a href="#" class="flex-item grow flex-margin-small my-palettes">My Palettes</a>
+        </div>
+    </div>
+    <div class="upload">
+        <div class="upload-background flex row center">
+            <div class="popup flex column mobile-column start">
+                <div class="flex row space mobile-row flex-item stretch">
+                    <span></span>
+                    <h3>Upload Image</h3>
+                    <span class="close"></span>
+                </div>
+                <div class="flex-item stretch flex-margin-small file-upload dashed auto-upload">
+                    <input type="file" name="photo" id="photo">
+                    <label for="photo">
+                        <b>Choose a file</b>
+                        <span class="file-upload__dragndrop"> or drag it here</span>.
+                    </label>
+                    <div class="file-upload__info"></div>
+                    <div class="file-upload__uploading">Uploading…</div>
+                    <div class="file-upload__success">Done!</div>
+                    <div class="file-upload__error">Error! <span></span>.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

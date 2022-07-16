@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Favorites{% endblock %}
+
+{% block content %}
+<section class="favorites flex row space">
+    <div class="flex-item grow flex column start mobile-column">
+        <h2 class="center flex-item stretch">My Palettes</h2>
+        {% if palettes %}
+        <div class="palettes flex-item stretch flex column start mobile-column">
+            {% for palette in palettes %}
+            <div class="palette flex row space mobile-row flex-item {% if loop.index > 1 %}flex-margin-small{% endif %}"
+                data-id="{{ palette.id }}">
+                {% for color in palette.colors %}
+                <div class="color flex-item grow {% if color.lightness > 70 %}dark{% endif %}"
+                    style="background-color: #{{ color.hex }};">
+                    <div class="color-hex">{{ color.hex }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="flex-item stretch center">You have not saved any palettes yet.</div>
+        {% endif %}
+    </div>
+    <div class="flex-item grow flex-margin flex column start mobile-column">
+        <h2 class="center flex-item stretch">My Colors</h2>
+        {% if colors %}
+        <div class="colors flex-item stretch flex column mobile-column">
+            {% for color in colors %}
+            <div class="color flex-item stretch {% if loop.index > 1 %}flex-margin-small{% endif %} {% if color.lightness > 70 %}dark{% endif %}"
+                data-id="{{ color.id }}" style="background-color: #{{ color.hex }};">
+                <div class="color-hex">{{ color.hex }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="flex-item stretch center">You have not saved any colors yet.</div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

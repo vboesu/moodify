@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Mood Search Results{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/paginate.js"></script>
+{% endblock %}
+
+{% block content %}
+<section class="home flex column mobile-column">
+    <h1 class="flex-item stretch center">Results: {{ search.query }}</h1>
+    <div class="results flex-item grow flex row mobile-row wrap space">
+        {% if not search.status == "done" %}
+        <div class="progress-bar" data-progress="0"><span class="progress"></span></div>
+        {% else %}
+        {% for img in search.ranked_images %}
+        <div class="result">
+            <img src="{{ img.json.preview_url }}" data-full="{{ img.json.image_url }}">
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</section>
+<script>
+    var searchID = "{{ search.id }}"
+
+    function addImages(images) {
+        $.each(images, function (_, v) {
+            $(".results").append(
+                $("<div/>", { "class": "result" }).append(
+                    $("<img/>").attr("src", v.preview_url)).data("full", v.image_url))
+        })
+
+        var pagination = new Paginate(".result", {
+            page_size: 50
+        })
+    }
+
+    function fetch() {
+        ajax(`/search/${searchID}`, {
+            method: "GET",
+            returnData: function (data) {
+                console.log(data)
+                if (data.status == "done") {
+                    $(".progress-bar").remove()
+                    addImages(data.images)
+                } else if (data.status == "error") {
+                    $(".progress-bar").remove()
+                    $(".results").text("Error in search...")
+                } else if (data.status == "active") {
+                    $(".progress-bar").data("progress", data.progress)
+                    $(".progress-bar .progress").css("width", `${data.progress * 100}%`)
+                    setTimeout(fetch, 250)
+                }
+            }
+        })
+    }
+
+    $(function () {
+        {% if not search.ranked_images %}
+        // continuously check for results
+        fetch()
+        {% else %}
+        var pagination = new Paginate(".result", {
+            page_size: 50
+        })
+        {% endif %}
+
+        $(document).on("click", ".results .result", function () {
+            window.open($(this).find("img").data("full"), "_blank")
+        })
+    })
+</script>
+{% endblock %}

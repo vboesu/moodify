@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Mood Search{% endblock %}
+
+{% block content %}
+<section class="mood-search flex column mobile-column">
+    <h1 class="center">Mood Search</h1>
+    <div class="search-bar white flex row mobile-row">
+        <input class="flex-item grow" type="text" id="search" name="search" placeholder="What are you looking for?">
+        <a class="button primary search enter-to-click">Search</a>
+    </div>
+    <h3 class="center">Selected Palette{% if not palette and palettes %} (from favorites){% endif %}</h3>
+    {% if palette %}
+    <div class="palettes flex-item stretch flex column start mobile-column">
+        <div class="palette flex row space mobile-row flex-item" data-colors="{{ palette | json }}">
+            {% for color in palette %}
+            <div class="color flex-item grow" style="background-color: #{{ color }};"></div>
+            {% endfor %}
+        </div>
+    </div>
+    {% elif palettes %}
+    <div class="flex-item stretch" style="position: relative;">
+        <div class="select-palette-container flex column start mobile-column flex-item grow">
+            <div class="palettes flex-item stretch flex row start mobile-row flex-item grow">
+                {% for palette in palettes %}
+                <div class="palette flex row space mobile-row flex-item" data-colors="{{ palette.colors | json }}">
+                    {% for color in palette.colors %}
+                    <div class="color flex-item grow" style="background-color: #{{ color }};"></div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="button select-palette previous-palette"></div>
+        <div class="button select-palette next-palette"></div>
+    </div>
+    {% endif %}
+    </div>
+</section>
+<script>
+    {% if palette %}
+    var selectedPalette = [{% for p in palette %}"{{ p }}", {% endfor %}]
+    {% else %}
+    var selectedPalette = null
+    {% endif %}
+    var selectedPaletteIndex = 0
+
+    // palette selection
+    function selectPalette(idx) {
+        selectedPaletteIndex = idx
+        let p = $(".palette").eq(selectedPaletteIndex)
+        selectedPalette = p.data("colors")
+        $(".select-palette-container").animate({ scrollLeft: p.offset().left - $(".palettes").offset().left })
+    }
+
+    function updateInactive(idx) {
+        $(".select-palette").show()
+        if (idx <= 0) $(".previous-palette").hide()
+        if (idx >= $(".palette").length - 1) $(".next-palette").hide()
+    }
+
+    function update(idx) {
+        selectPalette(idx)
+        updateInactive(idx)
+    }
+
+
+    $(function () {
+        // if element exists
+        var selecting = $(".select-palette-container").length == true
+        if (selecting) {
+            // initialize
+            update(selectedPaletteIndex)
+        }
+
+        $(".previous-palette").on("click", function () {
+            if (selecting) {
+                selectedPaletteIndex = Math.max(0, selectedPaletteIndex - 1)
+                update(selectedPaletteIndex)
+            }
+        })
+
+        $(".next-palette").on("click", function () {
+            if (selecting) {
+                selectedPaletteIndex = Math.min($(".palette").length - 1, selectedPaletteIndex + 1)
+                update(selectedPaletteIndex)
+            }
+        })
+
+        // search
+        $(".search").on("click", function () {
+            $(".form-invalid").removeClass("form-invalid")
+            // check if palette was selected
+            if (!selectedPalette) {
+                alert("Please select a palette")
+            } else if (!$("#search").val().trim()) {
+                $(".search-bar").addClass("form-invalid")
+            } else {
+                // create URL
+                let url = new URL(location.href)
+
+                url.searchParams.append("q", $("#search").val().trim())
+                url.searchParams.append("p", selectedPalette)
+
+                location.href = url.href
+            }
+        })
+    })
+</script>
+{% endblock %}

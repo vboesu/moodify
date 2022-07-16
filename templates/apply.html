@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply Palette to Image{% endblock %}
+
+{% block content %}
+<section class="home flex column mobile-column">
+    <h1 class="center">Apply Palette to Image</h1>
+    <div class="flex row flex-item grow">
+        <div class="flex column mobile-column flex-item grow" style="min-height: 16rem">
+            <h3 class="center">Select Image</h3>
+            <img class="file-upload-preview">
+            <div class="flex-item grow file-upload dashed" data-preview="file-upload-preview">
+                <input type="file" name="photo" id="photo">
+                <label for="photo">
+                    <b>Choose a file</b>
+                    <span class="file-upload__dragndrop"> or drag it here</span>.
+                </label>
+                <div class="file-upload__info"></div>
+                <div class="file-upload__uploading">Uploading…</div>
+                <div class="file-upload__success">Done!</div>
+                <div class="file-upload__error">Error! <span></span>.</div>
+            </div>
+        </div>
+        <div class="flex column mobile-column flex-item grow flex-margin">
+            <h3 class="center">Selected Palette{% if not palette and palettes %} (from favorites){% endif %}</h3>
+            {% if palette %}
+            <div class="palettes flex-item grow flex column start mobile-column">
+                <div class="palette flex row space mobile-row flex-item" data-colors="{{ palette | json }}">
+                    {% for color in palette %}
+                    <div class="color flex-item grow" style="background-color: #{{ color }};"></div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% elif palettes %}
+            <div class="flex column center mobile-column flex-item grow">
+                <div class="flex-item stretch" style="position: relative;">
+                    <div class="select-palette-container flex column start mobile-column flex-item grow">
+                        <div class="palettes flex-item stretch flex row start mobile-row flex-item grow">
+                            {% for palette in palettes %}
+                            <div class="palette flex row space mobile-row flex-item"
+                                data-colors="{{ palette.colors | json }}">
+                                {% for color in palette.colors %}
+                                <div class="color flex-item grow" style="background-color: #{{ color }};"></div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="button select-palette previous-palette"></div>
+                    <div class="button select-palette next-palette"></div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="flex-item stretch flex-margin flex row mobile-row">
+                <a class="button primary flex-item grow apply enter-to-click">Apply Palette to Image</a>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var selectedPalette = null
+    var selectedPaletteIndex = 0
+
+    // palette selection
+    function selectPalette(idx) {
+        selectedPaletteIndex = idx
+        let p = $(".palette").eq(selectedPaletteIndex)
+        selectedPalette = p.data("colors")
+        $(".select-palette-container").animate({ scrollLeft: p.offset().left - $(".palettes").offset().left })
+    }
+
+    function updateInactive(idx) {
+        $(".select-palette").show()
+        if (idx <= 0) $(".previous-palette").hide()
+        if (idx >= $(".palette").length - 1) $(".next-palette").hide()
+    }
+
+    function update(idx) {
+        selectPalette(idx)
+        updateInactive(idx)
+    }
+
+
+    $(function () {
+        // if element exists
+        var selecting = $(".select-palette-container").length == true
+        if (selecting) {
+            // initialize
+            update(selectedPaletteIndex)
+        }
+
+        $(".previous-palette").on("click", function () {
+            if (selecting) {
+                selectedPaletteIndex = Math.max(0, selectedPaletteIndex - 1)
+                update(selectedPaletteIndex)
+            }
+        })
+
+        $(".next-palette").on("click", function () {
+            if (selecting) {
+                selectedPaletteIndex = Math.min($(".palette").length - 1, selectedPaletteIndex + 1)
+                update(selectedPaletteIndex)
+            }
+        })
+
+        // apply
+        $(".apply").on("click", function () {
+            $(".form-invalid").removeClass("form-invalid")
+            // check if palette was selected
+            if (!selectedPalette) {
+                alert("Please select a palette")
+            } else if (!validateFiles($("#photo").get(0).files)) {
+                $(".file-upload").addClass("form-invalid")
+            } else {
+                // create URL
+                let url = new URL(location.origin + "/api/apply")
+                url.searchParams.append("p", selectedPalette)
+
+                upload($("#photo").get(0).files[0], url.href, function (data) {
+                    if (data.file) {
+                        window.open("/api/apply/" + data.file, "_blank")
+                    }
+                })
+            }
+        })
+    })
+</script>
+{% endblock %}

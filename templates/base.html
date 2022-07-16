@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+    <head>
+        <!-- favicons -->
+        <link rel="apple-touch-icon" sizes="57x57" href="">
+        <link rel="apple-touch-icon" sizes="60x60" href="">
+        <link rel="apple-touch-icon" sizes="72x72" href="">
+        <link rel="apple-touch-icon" sizes="76x76" href="">
+        <link rel="apple-touch-icon" sizes="114x114" href="">
+        <link rel="apple-touch-icon" sizes="120x120" href="">
+        <link rel="apple-touch-icon" sizes="144x144" href="">
+        <link rel="apple-touch-icon" sizes="152x152" href="">
+        <link rel="apple-touch-icon" sizes="180x180" href="">
+        <link rel="icon" type="image/png" sizes="192x192" href="">
+        <link rel="icon" type="image/png" sizes="32x32" href="">
+        <link rel="icon" type="image/png" sizes="96x96" href="">
+        <link rel="icon" type="image/png" sizes="16x16" href="">
+        <meta name="theme-color" content="#A2C2D6">
+        <link href="/static/css/styles.css" rel="stylesheet" />
+        {% block styles %}{% endblock %}
+        <script src="/static/js/jquery.js"></script>
+        <script defer src="/static/js/scripts.js"></script>
+        {% block scripts %}{% endblock %}
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+        {% block metas %}{% endblock %}
+        <title>{% block title %}{% endblock %} | moodify</title>
+    </head>
+
+    <body>
+        <div class="body">
+            <!-- navigation -->
+            <div class="nav">
+                <div class="nav-desktop flex space mobile-hide {% block nav_desktop_classes %}{% endblock %}">
+                    <a class="nav-logo" href="/"></a>
+                    <div class="nav-links-wrapper">
+                        <div class="nav-links flex row space start transition">
+                            {% if env.logged_in %}
+                            <div class="flex-item stretch nav-link transition">
+                                <a class="transition" href="/favorites">My Favorites</a>
+                            </div>
+                            {% endif %}
+                            <div class="flex-item stretch nav-link transition">
+                                <a class="transition" href="/generate">Generate Palette</a>
+                            </div>
+                            <div class="flex-item stretch nav-link transition">
+                                <a class="transition" href="/search">Mood Search</a>
+                            </div>
+                            <div class="flex-item stretch nav-link transition">
+                                <a class="transition" href="/apply">Palette to Image</a>
+                            </div>
+                            {% if not env.logged_in %}
+                            <div class="flex-item stretch nav-link transition">
+                                <a class="transition" href="/login">Login</a>
+                            </div>
+                            {% endif %}
+                            {% if env.logged_in %}
+                            <div class="flex-item stretch nav-link transition">
+                                <a class="transition" href="/logout">Logout</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-mobile mobile-show">
+                    <div class="flex row mobile-row space">
+                        <a class="nav-logo" href="/"></a>
+                        <div class="burger flex column mobile-column space">
+                            <div class="burger-top transition"></div>
+                            <div class="burger-bottom transition"></div>
+                        </div>
+                    </div>
+                    <div class="nav-links">
+                        {% if env.logged_in %}
+                        <div class="flex-item stretch nav-link transition">
+                            <a class="transition" href="/favorites">My Favorites</a>
+                        </div>
+                        {% endif %}
+                        <div class="flex-item stretch nav-link transition">
+                            <a class="transition" href="/generate">Generate Palette</a>
+                        </div>
+                        <div class="flex-item stretch nav-link transition">
+                            <a class="transition" href="/search">Mood Search</a>
+                        </div>
+                        <div class="flex-item stretch nav-link transition">
+                            <a class="transition" href="/apply">Palette to Image</a>
+                        </div>
+                        {% if not env.logged_in %}
+                        <div class="flex-item stretch nav-link transition">
+                            <a class="transition" href="/login">Login</a>
+                        </div>
+                        {% endif %}
+                        {% if env.logged_in %}
+                        <div class="flex-item stretch nav-link transition">
+                            <a class="transition" href="/logout">Logout</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% block content %}
+            {% endblock %}
+            <section class="footer flex row space">
+                <div class="footer-column space flex-item grow">
+                    <div class="flex row">
+                        <img class="footer-logo" src="/static/icons/logo_white.svg">
+                        <div class="large-number" style="margin: 0 1rem">&middot;</div>
+                        <div class="name" style="max-width: 20rem">
+                            Final Project for CS 50 at Harvard College
+                        </div>
+                    </div>
+                    <div class="copyright">
+                        © Vincent Börsch-Supan 2021
+                    </div>
+                </div>
+                <div class="footer-row flex row mobile-row flex-item flex-margin"></div>
+            </section>
+        </div>
+    </body>
+
+</html>
