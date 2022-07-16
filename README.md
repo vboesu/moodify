@@ -3,9 +3,14 @@ Generate color palettes randomly or from an image and apply them in a search or 
 Implemented in Python (3.6+) and C for speed.
 
 ## Table of Contents
+* [Screenshots](#screenshots)
 * [Installation](#install)
 * [Setup](#setup)
 * [Usage](#usage)
+
+## Screenshots
+![moodify Home](https://ibb.co/nwCWdSZ "moodify Home")
+![moodify Generate Palette](https://ibb.co/7Sbd7ZK "moodify Generate Palette")
 
 ## Installation
 To install the project, it suffices to download the repository into a folder and extract it. I recommend creating a virtual environment for the project using
