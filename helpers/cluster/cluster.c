@@ -1,8 +1,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "data.c"
-
 uint64_t max(uint64_t x, uint64_t y) { return x > y ? x : y; }
 
 void array_zero(uint64_t *arr, int n)
