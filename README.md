@@ -6,7 +6,6 @@ Implemented in Python (3.6+) and C for speed.
 * [Installation](#install)
 * [Setup](#setup)
 * [Usage](#usage)
-* [YouTube](#youtube)
 
 ## Installation
 To install the project, it suffices to download the repository into a folder and extract it. I recommend creating a virtual environment for the project using
@@ -30,6 +29,3 @@ $ gcc -shared -o [FILE].so [FILE].o
 To start the web server, run ```flask run``` in your virtual environment. *Warning*: This should only be used for testing, not as a production server. You can find out more about deploying flask to production [here](https://flask.palletsprojects.com/en/2.0.x/tutorial/deploy/).
 
 The database for moodify is created automatically when you first start up the app, as well as the ```uploads``` folder in the root directory of the project. Make sure that you have sufficient permissions to the project folder to avoid errors.
-
-## YouTube
-The YouTube video introducing my project can be found [here](https://youtu.be/dyhaMnUnaO8).
