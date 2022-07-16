@@ -1,1 +1,4 @@
 key.txt
+__pycache__/
+venv/
+moodify.db
